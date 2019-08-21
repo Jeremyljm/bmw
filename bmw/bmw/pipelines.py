@@ -6,6 +6,7 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import os
 from urllib import request
+from scrapy.pipelines.images import ImagesPipeline
 
 class BmwPipeline(object):
     def __init__(self):
@@ -15,14 +16,16 @@ class BmwPipeline(object):
 
     def process_item(self, item, spider):
         category = item['category']
-        urls = item['url']
+        urls = item['urls']
 
         category_path = os.path.join(self.path,category)
         if not os.path.exists(category_path):
             os.mkdir(category_path)
         for url in urls:
-            print(type(url))
             image_name = url.split('_')[-1]
             request.urlretrieve(url,os.path.join(category_path,image_name))
 
         return item
+
+# class BmwImagesPipeline(ImagesPipeline):
+#     def
